@@ -1,10 +1,10 @@
-import javax.naming.ldap.ExtendedRequest;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Window extends JFrame {
+    private JLabel gameOverLabel;
 
     JPanel gameFieldPanel;
     Window(){
@@ -36,28 +36,54 @@ public class Window extends JFrame {
             //adding cells to the pannel;
             for(int i = 0 ; i < Game.NUMBER_OF_CELLS;i++){
                 for(int j = 0 ; j < Game.NUMBER_OF_CELLS;j++){
-                    gameFieldPanel.add(this.creatingLabelForCell());
+                    gameFieldPanel.add(this.creatingLabelForCell(i,j));
                 }
             }
 
             cellLabel.setLocation(Game.CELL_SIZE,Game.CELL_SIZE);
             this.add(gameFieldPanel);
+                //adding the GameOverLabel an making it invisible
+                    gameOverLabel = new JLabel();
+                    gameOverLabel.setHorizontalAlignment(JLabel.CENTER);
+                    gameOverLabel.setVerticalAlignment(JLabel.CENTER);
+                    gameOverLabel.setLocation(this.getX()+this.getWidth(),this.getY()+this.getHeight());
+                    gameOverLabel.setSize(100,40);
+                    gameOverLabel.setText("Game over");
+                    gameOverLabel.setVisible(false);
             this.setVisible(true);
 
         }
         //creates a label for a cell
 
 
-                private JLabel creatingLabelForCell(){
+                private JLabel creatingLabelForCell(int horizontalNumber,int verticalNumber){
                     JLabel defaultcell = new JLabel();
                     defaultcell.addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
+                            Cell.createCells();
                             if(e.getButton() == 1){
-                                defaultcell.setBackground(Color.red);
+                                defaultcell.setBackground(Color.pink);
+                                defaultcell.setHorizontalAlignment(JLabel.CENTER);
+                                if(Cell.getMassivOfCells()[horizontalNumber][verticalNumber].getStateOfCell()== Cell.StateOfCell.HAS_BOMB_NEARBY){
+                                    //print number of bombs nearby
+                                }
+                                if(Cell.getMassivOfCells()[horizontalNumber][verticalNumber].getStateOfCell()== Cell.StateOfCell.HAS_BOMB){
+                                    //game over
+                                    gameOverLabel.setVisible(true);
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
+                                    System.exit(0);
+                                }
                             }
                             if(e.getButton() == 3){
-
+                                defaultcell.setBackground(Color.red);
+                                defaultcell.setFont(new Font("serif",Font.BOLD,30));
+                                defaultcell.setText("F");
+                                defaultcell.setHorizontalAlignment(JLabel.CENTER);
                             }
                         }
 
@@ -86,11 +112,6 @@ public class Window extends JFrame {
                     defaultcell.setBorder(BorderFactory.createLineBorder(Color.pink,Game.THICKNESS_OF_BORDERLINE));
                     return defaultcell;
                 }
-
-        private void repaintigCells(JLabel repaintingLabel){
-            repaintingLabel.setVisible(false);
-        }
-
 
 
 }
