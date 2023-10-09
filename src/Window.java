@@ -60,10 +60,11 @@ public class Window extends JFrame {
                                         defaultcell.setHorizontalAlignment(JLabel.CENTER);
                                         if(Cell.getMassivOfCells()[horizontalNumber][verticalNumber].getStateOfCell()== Cell.StateOfCell.HAS_BOMB_NEARBY){
                                             //print number of bombs nearby
+                                            defaultcell.setText(String.valueOf(Cell.getMassivOfCells()[verticalNumber][horizontalNumber].getNumberOfMines()));
                                         }
                                         if(Cell.getMassivOfCells()[horizontalNumber][verticalNumber].getStateOfCell()== Cell.StateOfCell.HAS_BOMB){
                                             //game over
-                                            gameFieldPanel.setVisible(false);
+                                            System.exit(0);
 
                                             //type protocol about finishing the game and opening a number of bombs nearby
                                         }
